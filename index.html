@@ -118,6 +118,9 @@ body {
 			scorePrint.text = "Score : " + scoreCount;
 			game.world.bringToTop(scorePrint);
 
+			livesPrint.text = "Lives : " + livesCount;
+			game.world.bringToTop(livesPrint);
+
 			game.physics.arcade.collide(player, layer);
 			game.physics.arcade.collide(goombas, layer);
 			game.physics.arcade.overlap(player, goombas, goombaOverlap);
@@ -190,7 +193,7 @@ body {
 				player.frame = 6;
 				player.body.enable = false;
 				player.animations.stop();
-				
+
 				game.time.events.add(Phaser.Timer.SECOND * 3, function() {
 					if(livesCount > 0){
 						this.game.state.restart();
