@@ -40,6 +40,9 @@ body {
 					Phaser.Tilemap.TILED_JSON);
 		}
 
+		var scorePrint;
+		var scoreCount;
+
 		var music;
 		var jumpSound;
 		var coinSound;
@@ -47,6 +50,16 @@ body {
 		var deathSound;
 
 		function create() {
+			scorePrint = game.add.text(5, 5, '0',{
+				font: "25px arial",
+				fill: "#ffffff",
+				aligment: "center"
+			});
+			scorePrint.fixedToCamera = true;
+			scorePrint.stroke = '#000000';
+			scorePrint.strokeThickness = 1;
+			scoreCount = 0;
+
 			music = game.add.audio('music');
 			music.play('',0,1,true);
 
@@ -88,6 +101,9 @@ body {
 			cursors = game.input.keyboard.createCursorKeys();
 		}
 		function update() {
+			scorePrint.text = "Score : " + scoreCount;
+			game.world.bringToTop(scorePrint);
+
 			game.physics.arcade.collide(player, layer);
 			game.physics.arcade.collide(goombas, layer);
 			game.physics.arcade.overlap(player, goombas, goombaOverlap);
@@ -129,6 +145,8 @@ body {
 			coinSound = game.add.audio('coin');
 			coinSound.play();
 
+			scoreCount += 10;
+
 			coin.kill();
 		}
 		function goombaOverlap(player, goomba) {
@@ -136,6 +154,8 @@ body {
 
 				stompSound = game.add.audio('stomp');
 				stompSound.play();
+
+				scoreCount += 25;
 
 				goomba.animations.stop();
 				goomba.frame = 2;
@@ -145,7 +165,7 @@ body {
 					goomba.kill();
 				});
 			} else {
-				
+
 				music.stop();
 				deathSound = game.add.audio('death');
 				deathSound.play();
