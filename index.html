@@ -43,6 +43,10 @@ body {
 		var scorePrint;
 		var scoreCount;
 
+		localStorage.setItem( 'lives', 3);
+		var livesPrint;
+		var livesCount;
+
 		var music;
 		var jumpSound;
 		var coinSound;
@@ -59,6 +63,16 @@ body {
 			scorePrint.stroke = '#000000';
 			scorePrint.strokeThickness = 1;
 			scoreCount = 0;
+
+			livesPrint = game.add.text(5, 5, '0',{
+				font: "25px arial",
+				fill: "#ffffff",
+				aligment: "center"
+			});
+			livesPrint.fixedToCamera = true;
+			livesPrint.stroke = '#000000';
+			livesPrint.strokeThickness = 1;
+			livesCount = parseInt(localStorage.getItem("lives"));
 
 			music = game.add.audio('music');
 			music.play('',0,1,true);
@@ -166,6 +180,9 @@ body {
 				});
 			} else {
 
+				livesCount -= 1;
+				localStorage.setItem( "lives", livesCount);
+
 				music.stop();
 				deathSound = game.add.audio('death');
 				deathSound.play();
@@ -173,8 +190,13 @@ body {
 				player.frame = 6;
 				player.body.enable = false;
 				player.animations.stop();
+				
 				game.time.events.add(Phaser.Timer.SECOND * 3, function() {
-					game.paused = true;
+					if(livesCount > 0){
+						this.game.state.restart();
+					}else if(livesCount == 0){
+						game.paused = true;
+					}
 				});
 			}
 		}
